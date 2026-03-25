@@ -19,7 +19,7 @@ object MatrixLib : Plugin() {
             branding = branding,
             headline = "Loading shared Matrix runtime",
             details = listOf(
-                MatrixConsoleFact("Exports", "branding / text / yaml / console"),
+                MatrixConsoleFact("Exports", "action / menu / compat / text / yaml / console"),
                 MatrixConsoleFact("Usage", "Required by MatrixShop, MatrixAuth, MatrixCook")
             )
         )
@@ -30,7 +30,7 @@ object MatrixLib : Plugin() {
             branding = branding,
             version = pluginVersion,
             details = listOf(
-                MatrixConsoleFact("API", "MatrixText, MatrixYamlBundle"),
+                MatrixConsoleFact("API", "Action, menu, compat, text, yaml"),
                 MatrixConsoleFact("Runtime", "Console visuals and resource bridge")
             )
         )
