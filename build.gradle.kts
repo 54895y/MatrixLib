@@ -31,6 +31,7 @@ repositories {
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly(kotlin("stdlib"))
+    compileOnly("com.zaxxer:HikariCP:4.0.3")
 }
 
 tasks.withType<JavaCompile> {
