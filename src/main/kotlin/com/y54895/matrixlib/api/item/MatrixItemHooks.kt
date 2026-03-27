@@ -32,11 +32,12 @@ interface MatrixItemHook {
 
 object MatrixItemHooks {
 
-    private val hooks = ConcurrentHashMap<String, MatrixItemHook>()
+    private val hooks = ConcurrentHashMap<String, LinkedHashMap<String, MatrixItemHook>>()
     private val aliasMap = ConcurrentHashMap<String, String>()
+    private const val defaultOwner = "__default__"
 
     init {
-        register(object : MatrixItemHook {
+        register(defaultOwner, object : MatrixItemHook {
             override val id: String = "minecraft"
             override val aliases: List<String> = listOf("mc")
             override val sourceName: String = "Minecraft"
@@ -51,16 +52,44 @@ object MatrixItemHooks {
     }
 
     fun register(hook: MatrixItemHook) {
-        hooks[hook.id.lowercase()] = hook
+        register(defaultOwner, hook)
+    }
+
+    fun register(owner: String, hook: MatrixItemHook) {
+        val normalizedId = hook.id.lowercase()
+        val ownerMap = hooks.computeIfAbsent(normalizedId) { linkedMapOf() }
+        ownerMap[owner] = hook
         hook.aliases.forEach { alias ->
-            aliasMap[alias.lowercase()] = hook.id.lowercase()
+            aliasMap[alias.lowercase()] = normalizedId
         }
     }
 
     fun unregister(id: String) {
+        unregister(defaultOwner, id)
+    }
+
+    fun unregister(owner: String, id: String) {
         val normalized = id.lowercase()
-        hooks.remove(normalized)
-        aliasMap.entries.removeIf { it.value == normalized }
+        val ownerMap = hooks[normalized] ?: return
+        ownerMap.remove(owner)
+        if (ownerMap.isEmpty()) {
+            hooks.remove(normalized)
+            aliasMap.entries.removeIf { it.value == normalized }
+        }
+    }
+
+    fun unregisterOwner(owner: String) {
+        val emptyIds = ArrayList<String>()
+        hooks.forEach { (id, ownerMap) ->
+            ownerMap.remove(owner)
+            if (ownerMap.isEmpty()) {
+                emptyIds += id
+            }
+        }
+        emptyIds.forEach { id ->
+            hooks.remove(id)
+            aliasMap.entries.removeIf { it.value == id }
+        }
     }
 
     fun clearCustom() {
@@ -134,8 +163,8 @@ object MatrixItemHooks {
     }
 
     private fun findHook(sourceId: String): MatrixItemHook? {
-        return hooks[sourceId]
-            ?: aliasMap[sourceId]?.let(hooks::get)
+        return hooks[sourceId]?.values?.lastOrNull()
+            ?: aliasMap[sourceId]?.let { hooks[it]?.values?.lastOrNull() }
     }
 
     private data class ParsedItemId(
