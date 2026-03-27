@@ -7,6 +7,7 @@ import com.y54895.matrixlib.api.console.MatrixConsoleFact
 import com.y54895.matrixlib.api.console.MatrixConsoleVisuals
 import com.y54895.matrixlib.api.resource.MatrixResourceFiles
 import com.y54895.matrixlib.api.text.MatrixText
+import com.y54895.matrixlib.api.text.MatrixYamlBundle
 import org.bukkit.Location
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Entity
@@ -165,6 +166,14 @@ open class MatrixPluginRuntime(
 
     fun saveResourceIfAbsent(path: String) {
         MatrixResourceFiles.saveResourceIfAbsent(plugin(), path)
+    }
+
+    fun createYamlBundle(resourcePath: String): MatrixYamlBundle {
+        return MatrixYamlBundle(
+            plugin = plugin(),
+            branding = runtimeBranding,
+            resourcePath = resourcePath
+        )
     }
 
     fun runLater(delayTicks: Long, task: Runnable) {
