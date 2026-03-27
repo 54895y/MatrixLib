@@ -9,6 +9,10 @@ plugins {
     kotlin("jvm") version "2.3.0"
 }
 
+base {
+    archivesName.set("MatrixLib")
+}
+
 taboolib {
     env {
         install(Basic, Bukkit)

@@ -1,1 +1,1 @@
-rootProject.name = "MatrixLib"
+rootProject.name = "matrixlib-api"
