@@ -2,6 +2,7 @@ package com.y54895.matrixlib.api.menu
 
 import com.y54895.matrixlib.api.action.ActionContext
 import com.y54895.matrixlib.api.action.ActionExecutor
+import com.y54895.matrixlib.api.item.MatrixItemHooks
 import com.y54895.matrixlib.api.text.MatrixText
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -159,8 +160,8 @@ object MenuRenderer {
     }
 
     fun buildIcon(icon: MenuIcon, placeholders: Map<String, String>): ItemStack {
-        val material = Material.matchMaterial(icon.material) ?: Material.STONE
-        val stack = ItemStack(material, icon.amount.coerceAtLeast(1))
+        val stack = MatrixItemHooks.resolveItemStack(icon.material, icon.amount, quiet = true)
+            ?: ItemStack(Material.STONE, icon.amount.coerceAtLeast(1))
         val meta = stack.itemMeta
         if (meta != null) {
             decorate(meta, MatrixText.apply(icon.name, placeholders), MatrixText.apply(icon.lore, placeholders))

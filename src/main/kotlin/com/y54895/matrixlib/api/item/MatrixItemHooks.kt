@@ -83,6 +83,14 @@ object MatrixItemHooks {
         return hook.isAvailable()
     }
 
+    fun resolveItemStack(rawId: String, amount: Int = 1, player: Player? = null, quiet: Boolean = false): ItemStack? {
+        val resolved = if (quiet) resolveQuiet(rawId, player) else resolve(rawId, player)
+        val base = resolved.itemStack ?: return null
+        return base.clone().apply {
+            this.amount = amount.coerceAtLeast(1)
+        }
+    }
+
     private fun resolveInternal(rawId: String, player: Player?, quiet: Boolean): MatrixResolvedItem {
         val parsed = parse(rawId)
         val hook = findHook(parsed.sourceId)
