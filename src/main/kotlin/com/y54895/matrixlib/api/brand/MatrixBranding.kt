@@ -6,5 +6,6 @@ data class MatrixBranding(
     val adminCommand: String? = null,
     val runtimeName: String = displayName,
     val accentColor: String = "&b",
-    val neutralColor: String = "&7"
+    val neutralColor: String = "&7",
+    val bannerTitle: String = displayName
 )

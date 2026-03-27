@@ -11,16 +11,16 @@ object MatrixLib : Plugin() {
     val branding = MatrixBranding(
         displayName = "MatrixLib",
         rootCommand = "/matrixlib",
-        runtimeName = "Matrix shared service bus"
+        runtimeName = "MatrixLib 共享运行时"
     )
 
     override fun onLoad() {
         MatrixConsoleVisuals.renderBoot(
             branding = branding,
-            headline = "Loading shared Matrix runtime",
+            headline = "正在装载共享接口与运行时桥接",
             details = listOf(
-                MatrixConsoleFact("Exports", "action / menu / compat / text / yaml / console"),
-                MatrixConsoleFact("Usage", "Required by MatrixShop, MatrixAuth, MatrixCook")
+                MatrixConsoleFact("导出接口", "action / menu / compat / text / yaml / console"),
+                MatrixConsoleFact("服务对象", "MatrixShop / MatrixAuth / MatrixCook")
             )
         )
     }
@@ -30,8 +30,8 @@ object MatrixLib : Plugin() {
             branding = branding,
             version = pluginVersion,
             details = listOf(
-                MatrixConsoleFact("API", "Action, menu, compat, text, yaml"),
-                MatrixConsoleFact("Runtime", "Console visuals and resource bridge")
+                MatrixConsoleFact("共享接口", "action / menu / compat / text / yaml / console"),
+                MatrixConsoleFact("运行状态", "控制台品牌 / 资源桥接 / 通用适配")
             )
         )
     }
@@ -40,7 +40,7 @@ object MatrixLib : Plugin() {
         MatrixConsoleVisuals.renderShutdown(
             branding = branding,
             details = listOf(
-                MatrixConsoleFact("State", "Shared runtime offline")
+                MatrixConsoleFact("运行状态", "共享运行时已离线")
             )
         )
     }
