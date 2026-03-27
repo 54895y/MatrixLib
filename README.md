@@ -22,6 +22,14 @@
 2. GitHub 构建模式  
    如果本地没有 `MatrixLib` 目录，则 Gradle 会通过 `sourceControl` 从 GitHub 拉取 `MatrixLib` 源码参与构建。
 
+当前公开标签：
+
+- `1.0.1`
+
+当前依赖坐标：
+
+- `com.y54895.matrixlib:matrixlib-api:1.0.1`
+
 GitHub 仓库地址：
 
 - Repo: [https://github.com/54895y/MatrixLib](https://github.com/54895y/MatrixLib)
