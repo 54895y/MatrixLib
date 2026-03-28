@@ -36,4 +36,5 @@ GitHub 仓库地址：
 
 ## Wiki
 
-- 项目 Wiki: [https://github.com/54895y/MatrixLib/wiki](https://github.com/54895y/MatrixLib/wiki)
+- 项目文档由站点仓库维护
+- 说明: 当前不以 GitHub Wiki 或独立 `wiki` 仓库作为文档入口
