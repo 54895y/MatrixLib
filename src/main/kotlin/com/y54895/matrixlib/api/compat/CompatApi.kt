@@ -656,10 +656,16 @@ object FoliaUtil {
     private fun cancelScheduledTask(task: Any?) {
         val scheduledTask = task ?: return
         val cancelMethod = scheduledTaskCancelMethods.computeIfAbsent(scheduledTask.javaClass) { taskClass ->
-            taskClass.methods.firstOrNull {
-                it.name == "cancel" && it.parameterCount == 0
-            }
+            (taskClass.declaredMethods.asSequence() + taskClass.methods.asSequence())
+                .firstOrNull {
+                    it.name == "cancel" && it.parameterCount == 0
+                }
+                ?.apply {
+                    runCatching { trySetAccessible() }
+                }
         }
-        cancelMethod?.invoke(scheduledTask)
+        runCatching {
+            cancelMethod?.invoke(scheduledTask)
+        }
     }
 }
