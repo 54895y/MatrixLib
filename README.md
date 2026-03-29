@@ -1,3 +1,6 @@
+> [!CAUTION]
+> 该项目使用codex生成，有问题请提[issue](https://github.com/54895y/MatrixLib/issues)
+
 # MatrixLib
 
 `MatrixLib` 是 Matrix 系列插件的共享前置插件，用于统一品牌风格、控制台输出、文本能力、YAML 读取、兼容层与共享菜单能力。
