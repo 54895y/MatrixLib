@@ -1,33 +1,41 @@
 > [!CAUTION]
-> 该项目使用codex生成，有问题请提[issue](https://github.com/54895y/MatrixLib/issues)
+> 本项目由 Codex 协作维护，如发现问题请直接提交 Issue。
 
 # MatrixLib
 
-`MatrixLib` 是 Matrix 系列插件的共享前置插件，用于统一品牌风格、控制台输出、文本能力、YAML 读取、兼容层与共享菜单能力。
+**Keywords:** Minecraft plugin library, Paper plugin library, Folia plugin library, Bukkit plugin API, Spigot plugin API, TabooLib, Kotlin plugin library, GUI framework, shared runtime, Matrix plugin framework
 
-它负责承载 `MatrixShop`、`MatrixAuth`、`MatrixCook` 中重复、稳定、可复用的基础设施，减少重复造轮子，并统一后续维护入口。
+MatrixLib is a shared Minecraft plugin runtime and dependency library for MatrixShop, MatrixAuth and MatrixCook. It targets Paper, Bukkit, Spigot and Folia servers, and provides shared branding, console, menu, YAML, compat and action APIs.
 
-## 核心能力
+**中文关键词：** Minecraft 插件前置, Paper 插件前置, Folia 插件前置, Bukkit 插件 API, Spigot 插件 API, TabooLib 前置, Kotlin 插件库, GUI 菜单框架, 共享运行时, Matrix 插件框架
 
-- 共享 `branding / console / text / yaml` 能力
-- 共享 `menu / compat / action` API
-- 统一中文终端 banner 与生命周期输出
-- 统一 Bukkit / Folia 兼容桥接
+## Discoverability
 
-## 下游构建方式
+- English: Minecraft plugin library, Paper plugin framework, Folia plugin framework, Bukkit shared runtime, TabooLib shared API, Kotlin Minecraft library
+- 中文: Minecraft 插件前置, 服务器插件前置, 中文控制台前置, 共享菜单前置, 兼容层前置, GUI 菜单前置
 
-下游仓库统一依赖坐标：
+## What MatrixLib Provides
+
+- Shared `branding / console / text / yaml` APIs
+- Shared `menu / compat / action` APIs
+- Unified Chinese terminal banner and lifecycle output
+- Shared Bukkit / Folia compatibility bridge
+- Shared runtime for MatrixShop, MatrixAuth and MatrixCook
+
+## Downstream Build Integration
+
+Dependency coordinate:
 
 - `com.y54895.matrixlib:matrixlib-api:1.0.1`
 
-当前支持两种构建模式：
+Downstream projects support two build modes:
 
-1. 本地联动模式  
-   如果工作区存在本地 `MatrixLib` 目录，则优先通过 `includeBuild` 直接联动本地源码。
-2. GitHub 源码模式  
-   如果本地没有 `MatrixLib` 目录，则 Gradle 会通过 `sourceControl` 从 GitHub 拉取 `MatrixLib` 源码参与构建。
+1. Local linked mode  
+   If the workspace contains a local `MatrixLib` directory, downstream projects use `includeBuild` for direct local source linkage.
+2. GitHub source mode  
+   If there is no local `MatrixLib` directory, Gradle resolves MatrixLib directly from GitHub through `sourceControl`.
 
-参考配置：
+Reference configuration:
 
 ```kotlin
 val matrixLibModule = "com.y54895.matrixlib:matrixlib-api"
@@ -39,12 +47,13 @@ sourceControl {
 }
 ```
 
-## 当前发布
+## Current Public Release
 
-- 首个公开发布版本：`1.0.1`
+- First public release: `1.0.1`
+
+## Links
+
 - GitHub Repo: [https://github.com/54895y/MatrixLib](https://github.com/54895y/MatrixLib)
-
-## 文档
-
-- 开发文档由 `MatrixDevDocs` 仓库统一维护
-- Wiki 入口以仓库主页和文档仓库为准
+- Issues: [https://github.com/54895y/MatrixLib/issues](https://github.com/54895y/MatrixLib/issues)
+- Releases: [https://github.com/54895y/MatrixLib/releases](https://github.com/54895y/MatrixLib/releases)
+- Related docs: `MatrixDevDocs`
