@@ -1,0 +1,16 @@
+# MatrixLib hologram bridge configuration
+
+enabled: true
+
+# Applied when a request does not provide its own offset.
+default-height: 1.5
+
+# Leave empty to use provider-order fallback.
+force-provider: ""
+
+provider-order:
+  - DecentHolograms
+  - FancyHolograms
+  - CMI
+
+debug: false
