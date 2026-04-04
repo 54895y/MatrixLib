@@ -4,8 +4,10 @@ import com.y54895.matrixlib.api.brand.MatrixBranding
 import com.y54895.matrixlib.api.console.MatrixConsoleFact
 import com.y54895.matrixlib.api.console.MatrixConsoleVisuals
 import com.y54895.matrixlib.api.economy.MatrixEconomy
+import com.y54895.matrixlib.metrics.BStatsMetrics
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.function.pluginVersion
+import taboolib.common.platform.function.warning
 
 object MatrixLib : Plugin() {
 
@@ -28,6 +30,10 @@ object MatrixLib : Plugin() {
 
     override fun onEnable() {
         MatrixEconomy.reload()
+        runCatching { BStatsMetrics.initialize() }
+            .onFailure {
+                warning("Failed to initialize bStats metrics: ${it.message ?: it.javaClass.simpleName}")
+            }
         MatrixConsoleVisuals.renderReady(
             branding = branding,
             version = pluginVersion,

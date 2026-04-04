@@ -25,6 +25,7 @@ taboolib {
         taboolib = "6.2.4-99fb800"
         coroutines = "1.8.1"
     }
+    relocate("org.bstats", "${project.group}.libs.bstats")
 }
 
 repositories {
@@ -33,6 +34,7 @@ repositories {
 }
 
 dependencies {
+    taboo("org.bstats:bstats-bukkit:3.2.1")
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs") {

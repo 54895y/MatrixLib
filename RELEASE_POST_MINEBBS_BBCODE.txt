@@ -1,0 +1,152 @@
+[center][size=7][b]MatrixLib[/b][/size][/center]
+[center][size=4][color=#3D8BFF]Matrix 系列统一前置插件 / 共享运行时基础层[/color][/size][/center]
+[center][color=#999999]适用于 MatrixShop / MatrixStorage / MatrixAuth / MatrixCook[/color][/center]
+[center][color=#999999]当前发布版本：1.3.0[/color][/center]
+
+[hr]
+
+[table]
+[tr]
+[td][b]插件定位[/b][/td]
+[td]Matrix 系列共享前置与运行时基础设施[/td]
+[/tr]
+[tr]
+[td][b]支持核心[/b][/td]
+[td]Paper / Bukkit / Spigot / Folia[/td]
+[/tr]
+[tr]
+[td][b]核心能力[/b][/td]
+[td]console / text / yaml / menu / compat / action / economy[/td]
+[/tr]
+[tr]
+[td][b]服务对象[/b][/td]
+[td]MatrixShop / MatrixAuth / MatrixCook / MatrixStorage[/td]
+[/tr]
+[/table]
+
+[quote]
+MatrixLib 是 Matrix 系列插件的共享前置插件，用于统一品牌风格、控制台输出、文本能力、YAML 读取、兼容层、共享菜单能力和共享货币模块。
+[/quote]
+
+[size=5][b][color=#3D8BFF]一、插件大概功能[/color][/b][/size]
+
+[list]
+[*][b]共享控制台与品牌层[/b]
+统一中文控制台横幅、生命周期输出和品牌风格
+[*][b]共享文本与 YAML 能力[/b]
+提供 text / yaml bundle 能力，减少下游插件重复实现
+[*][b]共享菜单与动作系统[/b]
+提供 menu / action API，方便系列插件复用 GUI 与行为逻辑
+[*][b]共享兼容层[/b]
+提供 Bukkit / Folia 兼容桥接与平台调度辅助
+[*][b]共享货币模块[/b]
+统一 Economy/currency.yml，作为 Matrix 系列货币定义主入口
+[*][b]运行时货币同步[/b]
+可把共享货币文件同步到 MatrixShop 与 MatrixStorage
+[*][b]共享基础设施[/b]
+提供 item hook registry、JDBC datasource factory、插件查找与命令注册辅助
+[/list]
+
+[size=5][b][color=#3D8BFF]二、Wiki 与相关地址[/color][/b][/size]
+
+[list]
+[*][b]项目仓库[/b]
+[url]https://github.com/54895y/MatrixLib[/url]
+[*][b]GitHub Releases[/b]
+[url]https://github.com/54895y/MatrixLib/releases[/url]
+[*][b]Issue 地址[/b]
+[url]https://github.com/54895y/MatrixLib/issues[/url]
+[*][b]Matrix 插件总文档入口[/b]
+[url]https://54895y.github.io/docs/plugins[/url]
+[/list]
+
+[size=5][b][color=#3D8BFF]三、Skills 使用方法[/color][/b][/size]
+
+如果你希望用 AI 帮你生成 Matrix 系列共享货币配置、跨插件联动配置或 Kether 脚本，可以直接使用公开的 [b]MatrixAgentSkills[/b]。
+
+[list]
+[*][b]Matrix Series Config 文档[/b]
+[url]https://54895y.github.io/docs/matrix-agent-skills/matrix-series-config[/url]
+[*][b]Codex / OpenAI Skills[/b]
+[url]https://github.com/54895y/MatrixAgentSkills/tree/main/matrix-series-config[/url]
+[*][b]Claude / Gemini / Cline / Roo / Continue 通用 Prompt[/b]
+[url]https://raw.githubusercontent.com/54895y/MatrixAgentSkills/main/portable/matrix-series-config.md[/url]
+[*][b]AIChat 知识库入口[/b]
+[url]https://raw.githubusercontent.com/54895y/MatrixAgentSkills/main/aichat/matrix-series-config-kb.md[/url]
+[/list]
+
+[b]推荐用法：[/b]
+
+[list=1]
+[*]把上面的 Skill 或 Prompt 链接直接发给你的 AI Agent
+[*]说明你要生成 MatrixLib 的共享货币文件，或同时联动 MatrixShop / MatrixStorage
+[*]让 Agent 输出 plugins/MatrixLib/Economy/currency.yml 以及相关插件的货币 key 规划
+[/list]
+
+[size=5][b][color=#3D8BFF]四、更新日志[/color][/b][/size]
+
+[b]当前源码主线重点：[/b]
+
+[list]
+[*]当前发布版本已升级到 1.3.0
+[*]共享 economy API 已正式收敛到 MatrixLib
+[*]新增共享 MatrixBStats API，统一承接 Matrix 系列插件的 bStats 遥测注册
+[*]plugins/MatrixLib/Economy/currency.yml 成为 Matrix 系列货币定义主入口
+[*]运行时会同步货币文件到 MatrixShop 与 MatrixStorage
+[*]共享 runtime text / console 能力已经稳定承载下游插件
+[*]共享 YAML bundle factory、item hooks、JDBC datasource factory 已落地
+[*]已提供共享 Bukkit 平台辅助能力，包括插件查找与反射命令注册
+[*]下游 MatrixAuth / MatrixCook / MatrixShop / MatrixStorage 已切到共享遥测 API
+[*]本地开发记录显示 MatrixLib 与全部下游 bash ./gradlew build 已通过
+[/list]
+
+[size=5][b][color=#3D8BFF]五、bStats 图表[/color][/b][/size]
+
+[list]
+[*]Plugin ID：30557
+[*]configured_currency_count：当前已配置货币数量
+[*]currency_modes：货币模式分布
+[*]currency_setup：单货币 / 多货币部署类型
+[/list]
+
+[b]预留图表位：[/b]
+
+[list]
+[*]downstream_plugin_count
+[*]resource_sync_targets
+[*]compat_bridge_modes
+[/list]
+
+[size=5][b][color=#3D8BFF]六、GitHub Issue 提交问题[/color][/b][/size]
+
+项目地址：
+[url]https://github.com/54895y/MatrixLib[/url]
+
+Issue 地址：
+[url]https://github.com/54895y/MatrixLib/issues[/url]
+
+如果你在使用过程中遇到以下问题，欢迎直接提交 Issue：
+
+[list]
+[*]前置加载失败
+[*]共享货币模块异常
+[*]下游插件兼容问题
+[*]菜单 / 文本 / YAML API 行为异常
+[*]Folia / Bukkit 兼容层问题
+[*]新功能建议
+[/list]
+
+[b]提交 Issue 时建议附带：[/b]
+
+[list]
+[*]服务端核心与版本
+[*]MatrixLib 版本
+[*]相关下游插件版本，例如 MatrixShop / MatrixStorage
+[*]控制台报错日志
+[*]相关配置文件片段
+[*]复现步骤
+[/list]
+
+[hr]
+[center][color=#999999]如果你正在找一个能为整套 Matrix 插件提供统一基础设施的前置层，可以试试 MatrixLib。[/color][/center]
+[right][size=2][color=red]VibeCoding 声明：本插件在开发过程中使用了 AI / Vibe Coding 作为辅助工具，但实际功能收敛、接口边界、兼容性验证与发布内容仍以仓库代码、文档和实机测试结果为准；如发现问题，请优先通过 GitHub Issues 提交反馈。[/color][/size][/right]

@@ -1,0 +1,123 @@
+[center][size=6][b]MatrixLib[/b][/size][/center]
+[center][size=4]Matrix 系列统一前置插件 / 共享运行时基础层[/size][/center]
+[center][size=3]当前发布版本：1.3.0[/size][/center]
+
+[hr]
+
+[b]插件简介[/b]
+
+MatrixLib 是 Matrix 系列插件的共享前置插件，用于统一品牌风格、控制台输出、文本能力、YAML 读取、兼容层、共享菜单能力和共享货币模块。
+
+它主要服务于 MatrixShop、MatrixAuth、MatrixCook 和 MatrixStorage，适用于 Paper、Bukkit、Spigot 和 Folia 服务端生态。
+
+[b]核心功能[/b]
+
+[list]
+[*]提供共享的 branding / console / text / yaml API
+[*]提供共享的 menu / compat / action / economy API
+[*]统一中文控制台横幅与生命周期输出
+[*]提供 Bukkit / Folia 兼容桥接能力
+[*]提供共享的 Economy/currency.yml 货币配置入口
+[*]运行时可同步货币配置到 MatrixShop 与 MatrixStorage
+[*]支持 Vault、PlayerPoints 与基于 PlaceholderAPI 的自定义货币动作
+[*]提供共享 JDBC datasource factory
+[*]提供共享 item hook registry，当前已覆盖 CraftEngine、ItemsAdder、Oraxen
+[*]提供共享 Bukkit 插件查找与反射命令注册辅助能力
+[/list]
+
+[b]Wiki / 相关地址[/b]
+
+[list]
+[*]项目仓库：[url]https://github.com/54895y/MatrixLib[/url]
+[*]GitHub Releases：[url]https://github.com/54895y/MatrixLib/releases[/url]
+[*]Issue 地址：[url]https://github.com/54895y/MatrixLib/issues[/url]
+[*]Matrix 插件总文档入口：[url]https://54895y.github.io/docs/plugins[/url]
+[/list]
+
+[b]Skills 使用方法[/b]
+
+如果你希望使用 AI 直接生成 Matrix 系列的共享货币配置、跨插件联动配置或 Kether 脚本，可以使用公开的 MatrixAgentSkills：
+
+[list]
+[*]Matrix Series Config 文档：[url]https://54895y.github.io/docs/matrix-agent-skills/matrix-series-config[/url]
+[*]Codex / OpenAI Skills：
+[url]https://github.com/54895y/MatrixAgentSkills/tree/main/matrix-series-config[/url]
+[*]Claude / Gemini / Cline / Roo / Continue 通用 Prompt：
+[url]https://raw.githubusercontent.com/54895y/MatrixAgentSkills/main/portable/matrix-series-config.md[/url]
+[*]AIChat 知识库入口：
+[url]https://raw.githubusercontent.com/54895y/MatrixAgentSkills/main/aichat/matrix-series-config-kb.md[/url]
+[/list]
+
+推荐使用方式：
+
+[list=1]
+[*]把对应的 Skill 或 Prompt 链接发给你的 AI Agent
+[*]告诉它你要生成 MatrixLib 的共享货币文件，或同时联动 MatrixShop / MatrixStorage
+[*]例如直接让 Agent 生成 plugins/MatrixLib/Economy/currency.yml，并同步规划 MatrixShop 与 MatrixStorage 的货币 key 引用
+[/list]
+
+[b]更新日志[/b]
+
+当前源码主线版本重点如下：
+
+[list]
+[*]当前发布版本已升级到 1.3.0
+[*]共享 economy API 已正式收敛到 MatrixLib
+[*]新增共享 MatrixBStats API，统一承接 Matrix 系列插件的 bStats 遥测注册
+[*]plugins/MatrixLib/Economy/currency.yml 成为 Matrix 系列货币定义主入口
+[*]运行时会同步货币文件到 MatrixShop 与 MatrixStorage
+[*]共享 runtime text / console 能力已经稳定承载下游插件
+[*]共享 YAML bundle factory、item hooks、JDBC datasource factory 已落地
+[*]已提供共享 Bukkit 平台辅助能力，包括插件查找与反射命令注册
+[*]下游 MatrixAuth / MatrixCook / MatrixShop / MatrixStorage 已切到共享遥测 API
+[*]本地开发记录显示 MatrixLib 与全部下游 bash ./gradlew build 已通过
+[/list]
+
+[b]bStats 图表[/b]
+
+[list]
+[*]Plugin ID：30557
+[*]configured_currency_count：当前已配置货币数量
+[*]currency_modes：货币模式分布
+[*]currency_setup：单货币 / 多货币部署类型
+[/list]
+
+[b]预留图表位[/b]
+
+[list]
+[*]downstream_plugin_count
+[*]resource_sync_targets
+[*]compat_bridge_modes
+[/list]
+
+[b]GitHub Issue 提交问题[/b]
+
+[list]
+[*]项目地址：[url]https://github.com/54895y/MatrixLib[/url]
+[*]Issue 地址：[url]https://github.com/54895y/MatrixLib/issues[/url]
+[/list]
+
+如果你在使用过程中遇到以下问题，欢迎直接提交 Issue：
+
+[list]
+[*]前置加载失败
+[*]共享货币模块异常
+[*]下游插件兼容问题
+[*]菜单 / 文本 / YAML API 行为异常
+[*]Folia / Bukkit 兼容层问题
+[*]新功能建议
+[/list]
+
+提交 Issue 时建议附带以下信息：
+
+[list]
+[*]服务端核心与版本
+[*]MatrixLib 版本
+[*]相关下游插件版本，例如 MatrixShop / MatrixStorage
+[*]控制台报错日志
+[*]相关配置文件片段
+[*]复现步骤
+[/list]
+
+[hr]
+[right][size=2][color=red]VibeCoding 声明：本插件在开发过程中使用了 AI / Vibe Coding 作为辅助工具，但实际功能收敛、接口边界、兼容性验证与发布内容仍以仓库代码、文档和实机测试结果为准；如发现问题，请优先通过 GitHub Issues 提交反馈。[/color][/size][/right]
