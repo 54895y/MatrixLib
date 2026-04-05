@@ -3,6 +3,7 @@ package com.y54895.matrixlib.api.update
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.y54895.matrixlib.api.brand.MatrixBranding
+import com.y54895.matrixlib.api.compat.FoliaUtil
 import com.y54895.matrixlib.api.resource.MatrixResourceFiles
 import com.y54895.matrixlib.api.text.MatrixText
 import org.bukkit.Bukkit
@@ -442,16 +443,20 @@ object MatrixPluginUpdates {
             return
         }
         val periodTicks = settings.checkIntervalMinutes * 60L * 20L
-        repeatingTaskId = Bukkit.getScheduler().runTaskTimerAsynchronously(
+        repeatingTaskId = FoliaUtil.runRepeating(
             BukkitPlugin.getInstance(),
-            Runnable { checkAllAsync() },
             periodTicks,
-            periodTicks
-        ).taskId
+            periodTicks,
+            Runnable { checkAllAsync() }
+        ).hashCode()
     }
 
     private fun runAsync(block: () -> Unit) {
-        Bukkit.getScheduler().runTaskAsynchronously(BukkitPlugin.getInstance(), Runnable(block))
+        if (FoliaUtil.isFolia) {
+            FoliaUtil.runLater(BukkitPlugin.getInstance(), 1L, Runnable(block))
+        } else {
+            Bukkit.getScheduler().runTaskAsynchronously(BukkitPlugin.getInstance(), Runnable(block))
+        }
     }
 
     private fun loadSettings(): MatrixUpdateSettings {
