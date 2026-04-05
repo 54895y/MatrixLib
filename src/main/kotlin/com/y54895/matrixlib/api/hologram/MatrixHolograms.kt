@@ -20,6 +20,10 @@ import taboolib.platform.BukkitPlugin
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Shared hologram bridge that picks one supported provider at runtime and keeps
+ * Matrix plugin requests synchronized with that provider.
+ */
 object MatrixHolograms {
 
     private const val resourcePath = "Hologram/config.yml"
@@ -63,17 +67,26 @@ object MatrixHolograms {
         requests.clear()
     }
 
+    /**
+     * Reload hologram settings and rebuild the active provider cache.
+     */
     fun reload() {
         settings = loadSettings()
         refreshAdapter(rebuildCached = true, force = true)
     }
 
+    /**
+     * Return the active hologram config file.
+     */
     fun configFile(): File {
         val plugin = BukkitPlugin.getInstance()
         MatrixResourceFiles.saveResourceIfAbsent(plugin, resourcePath)
         return MatrixResourceFiles.dataFile(plugin, resourcePath)
     }
 
+    /**
+     * Create or update a hologram request in the active provider.
+     */
     fun createOrUpdate(request: MatrixHologramRequest) {
         val qualifiedId = request.qualifiedId()
         if (request.lines.isEmpty()) {
@@ -85,12 +98,18 @@ object MatrixHolograms {
         adapter?.createOrUpdate(render(request))
     }
 
+    /**
+     * Remove a hologram by namespace and id.
+     */
     fun remove(namespace: String, id: String) {
         val qualifiedId = qualifiedId(namespace, id)
         requests.remove(qualifiedId)
         adapter?.remove(qualifiedId)
     }
 
+    /**
+     * Remove all holograms in a namespace.
+     */
     fun clearNamespace(namespace: String) {
         val prefix = "${namespace.trim().ifBlank { "matrix" }.lowercase()}_"
         val keys = requests.keys.filter { it.startsWith(prefix) }
@@ -100,10 +119,16 @@ object MatrixHolograms {
         }
     }
 
+    /**
+     * Return the configured default vertical offset.
+     */
     fun defaultHeight(): Double {
         return settings.defaultHeight
     }
 
+    /**
+     * Return the selected provider name or a status marker.
+     */
     fun providerSummary(): String {
         return if (!settings.enabled) {
             "disabled"
@@ -112,6 +137,9 @@ object MatrixHolograms {
         }
     }
 
+    /**
+     * Whether the hologram bridge is enabled in config.
+     */
     fun isEnabled(): Boolean {
         return settings.enabled
     }

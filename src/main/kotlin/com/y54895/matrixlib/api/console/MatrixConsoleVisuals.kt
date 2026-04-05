@@ -5,16 +5,27 @@ import com.y54895.matrixlib.api.text.MatrixText
 import org.bukkit.Bukkit
 import taboolib.common.platform.function.info
 
+/**
+ * Key-value line rendered inside Matrix console lifecycle blocks.
+ */
 data class MatrixConsoleFact(
     val label: String,
     val value: String
 )
 
+/**
+ * Shared lifecycle banner renderer for Matrix plugins.
+ *
+ * This API keeps console output visually consistent across the Matrix series.
+ */
 object MatrixConsoleVisuals {
 
     private const val MIN_BORDER_WIDTH = 66
     private val colorCodePattern = Regex("&[0-9a-fk-orA-FK-OR]")
 
+    /**
+     * Render the boot block used during plugin load.
+     */
     fun renderBoot(
         branding: MatrixBranding,
         headline: String,
@@ -30,6 +41,9 @@ object MatrixConsoleVisuals {
         )
     }
 
+    /**
+     * Render an arbitrary lifecycle stage block.
+     */
     fun renderStage(
         branding: MatrixBranding,
         stage: String,
@@ -44,6 +58,9 @@ object MatrixConsoleVisuals {
         )
     }
 
+    /**
+     * Render the ready block used after plugin enable completed successfully.
+     */
     fun renderReady(
         branding: MatrixBranding,
         version: String,
@@ -58,6 +75,9 @@ object MatrixConsoleVisuals {
         )
     }
 
+    /**
+     * Render the failure block used when startup aborts.
+     */
     fun renderFailure(
         branding: MatrixBranding,
         reason: String
@@ -70,6 +90,9 @@ object MatrixConsoleVisuals {
         )
     }
 
+    /**
+     * Render the shutdown block used during plugin disable.
+     */
     fun renderShutdown(
         branding: MatrixBranding,
         details: List<MatrixConsoleFact> = emptyList()

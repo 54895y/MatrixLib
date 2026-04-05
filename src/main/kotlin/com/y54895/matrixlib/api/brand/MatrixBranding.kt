@@ -1,5 +1,8 @@
 package com.y54895.matrixlib.api.brand
 
+/**
+ * Shared branding descriptor used by Matrix console, text, and command surfaces.
+ */
 data class MatrixBranding(
     val displayName: String,
     val rootCommand: String,

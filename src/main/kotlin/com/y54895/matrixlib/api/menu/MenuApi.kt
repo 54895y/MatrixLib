@@ -23,6 +23,9 @@ import java.util.UUID
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
+/**
+ * Immutable menu description loaded from YAML.
+ */
 data class MenuDefinition(
     val title: List<String>,
     val layout: List<String>,
@@ -30,6 +33,9 @@ data class MenuDefinition(
     val template: MenuTemplate = MenuTemplate("&f{name}", emptyList())
 )
 
+/**
+ * Static icon definition used by [MenuRenderer].
+ */
 data class MenuIcon(
     val material: String,
     val name: String = " ",
@@ -39,11 +45,17 @@ data class MenuIcon(
     val actions: Map<String, List<String>> = emptyMap()
 )
 
+/**
+ * Shared name and lore template block used by dynamic goods renderers.
+ */
 data class MenuTemplate(
     val name: String,
     val lore: List<String>
 )
 
+/**
+ * Inventory holder used for Matrix menus.
+ */
 class MatrixMenuHolder(
     private val owner: UUID,
     val backAction: Runnable? = null
@@ -57,13 +69,22 @@ class MatrixMenuHolder(
         return backingInventory
     }
 
+    /**
+     * Check whether the provided player is the menu owner.
+     */
     fun isViewer(player: Player): Boolean {
         return owner == player.uniqueId
     }
 }
 
+/**
+ * YAML menu loader for Matrix menu definitions.
+ */
 object MenuLoader {
 
+    /**
+     * Load a menu definition from disk.
+     */
     fun load(
         file: File,
         defaultTitle: List<String> = listOf("&8Matrix"),
@@ -116,8 +137,14 @@ object MenuLoader {
     }
 }
 
+/**
+ * Shared menu renderer used by Matrix plugins.
+ */
 object MenuRenderer {
 
+    /**
+     * Open a menu for a player.
+     */
     fun open(
         player: Player,
         definition: MenuDefinition,
@@ -158,6 +185,9 @@ object MenuRenderer {
         player.openInventory(inventory)
     }
 
+    /**
+     * Build a static icon stack from a menu icon definition.
+     */
     fun buildIcon(icon: MenuIcon, placeholders: Map<String, String>): ItemStack {
         val material = Material.matchMaterial(icon.material) ?: Material.STONE
         val stack = ItemStack(material, icon.amount.coerceAtLeast(1))
@@ -169,6 +199,9 @@ object MenuRenderer {
         return stack
     }
 
+    /**
+     * Apply Matrix menu visual defaults to an item meta.
+     */
     fun decorate(meta: ItemMeta, name: String, lore: List<String>) {
         meta.setDisplayName(MatrixText.color(name))
         meta.lore = MatrixText.apply(lore)
@@ -187,6 +220,9 @@ object MenuRenderer {
 }
 
 @Awake
+/**
+ * Shared inventory listener for Matrix menu holders.
+ */
 object MenuListener {
 
     @SubscribeEvent

@@ -25,6 +25,9 @@ import java.util.Collections
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Static registration descriptor for one Matrix plugin managed by the shared updater.
+ */
 data class MatrixManagedPlugin(
     val plugin: JavaPlugin,
     val displayName: String,
@@ -51,12 +54,18 @@ data class MatrixManagedPlugin(
     }
 }
 
+/**
+ * Release asset metadata selected from a GitHub release.
+ */
 data class MatrixReleaseAsset(
     val name: String,
     val browserDownloadUrl: String,
     val size: Long
 )
 
+/**
+ * Reduced latest-release payload used by the Matrix updater.
+ */
 data class MatrixReleaseInfo(
     val version: String,
     val tagName: String,
@@ -66,12 +75,18 @@ data class MatrixReleaseInfo(
     val asset: MatrixReleaseAsset
 )
 
+/**
+ * Pending update candidate discovered by a latest-release check.
+ */
 data class MatrixUpdateCandidate(
     val managedPlugin: MatrixManagedPlugin,
     val installedVersion: String,
     val release: MatrixReleaseInfo
 )
 
+/**
+ * Shared updater configuration loaded from `plugins/MatrixLib/Update/config.yml`.
+ */
 data class MatrixUpdateSettings(
     val enabled: Boolean,
     val checkOnStartup: Boolean,
@@ -85,6 +100,12 @@ data class MatrixUpdateSettings(
     val timeoutSeconds: Int
 )
 
+/**
+ * Shared GitHub Releases updater used by the Matrix plugin series.
+ *
+ * The updater only downloads jars into `plugins/update/`. Replacement is left to
+ * the server restart flow so the currently running jar is never overwritten.
+ */
 object MatrixPluginUpdates {
 
     private val registrations = ConcurrentHashMap<String, MatrixManagedPlugin>()
@@ -103,6 +124,9 @@ object MatrixPluginUpdates {
     lateinit var branding: MatrixBranding
         private set
 
+    /**
+     * Initialize updater state and listeners.
+     */
     fun bootstrap(branding: MatrixBranding) {
         if (bootstrapped) {
             return
@@ -114,6 +138,9 @@ object MatrixPluginUpdates {
         bootstrapped = true
     }
 
+    /**
+     * Register one managed plugin in the shared updater.
+     */
     fun register(
         plugin: JavaPlugin,
         displayName: String,
@@ -145,16 +172,25 @@ object MatrixPluginUpdates {
         }
     }
 
+    /**
+     * List all pending update candidates.
+     */
     fun listCandidates(): List<MatrixUpdateCandidate> {
         return candidates.values.sortedBy { it.managedPlugin.displayName.lowercase(Locale.ROOT) }
     }
 
+    /**
+     * Return all known managed plugin display names.
+     */
     fun knownPlugins(): List<String> {
         return registrations.values
             .map { it.displayName }
             .sortedBy { it.lowercase(Locale.ROOT) }
     }
 
+    /**
+     * Check GitHub Releases for all registered plugins asynchronously.
+     */
     fun checkAllAsync(sender: CommandSender? = null) {
         if (!settings.enabled) {
             sender?.sendUpdaterMessage("&e自动更新已在配置中禁用。")
@@ -168,6 +204,9 @@ object MatrixPluginUpdates {
         }
     }
 
+    /**
+     * Check GitHub Releases for a single managed plugin asynchronously.
+     */
     fun checkAsync(displayName: String, sender: CommandSender? = null) {
         val managed = registrations[displayName.lowercase(Locale.ROOT)]
         if (managed == null) {
@@ -177,10 +216,16 @@ object MatrixPluginUpdates {
         checkAsync(managed, sender)
     }
 
+    /**
+     * Return the pending update candidate for a plugin display name.
+     */
     fun candidate(displayName: String): MatrixUpdateCandidate? {
         return candidates[displayName.lowercase(Locale.ROOT)]
     }
 
+    /**
+     * Approve and download a pending update into `plugins/update/`.
+     */
     fun approveDownload(displayName: String, sender: CommandSender): Boolean {
         val candidate = candidate(displayName)
         if (candidate == null) {
@@ -200,12 +245,18 @@ object MatrixPluginUpdates {
         return true
     }
 
+    /**
+     * Approve and download all pending updates.
+     */
     fun approveAll(sender: CommandSender): Int {
         val current = listCandidates()
         current.forEach { approveDownload(it.managedPlugin.displayName, sender) }
         return current.size
     }
 
+    /**
+     * Return a short preview of the selected release notes.
+     */
     fun notesPreview(displayName: String): List<String> {
         val candidate = candidate(displayName) ?: return emptyList()
         return releaseNotesPreview(candidate.release.body)

@@ -4,14 +4,34 @@ import com.y54895.matrixlib.api.text.MatrixText
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 
+/**
+ * Runtime action context used by Matrix menu and UI layers.
+ *
+ * @property player player who triggered the action set
+ * @property placeholders resolved placeholders for action interpolation
+ * @property backAction optional callback used by the built-in `back` action
+ */
 data class ActionContext(
     val player: Player,
     val placeholders: Map<String, String>,
     val backAction: Runnable? = null
 )
 
+/**
+ * Executes Matrix action strings against a player context.
+ *
+ * Supported built-in actions:
+ * - `close`
+ * - `back`
+ * - `tell:<message>`
+ * - `sound:<SOUND>-<volume>-<pitch>`
+ * - any other non-blank string is treated as a player command
+ */
 object ActionExecutor {
 
+    /**
+     * Execute a list of actions in order.
+     */
     fun execute(context: ActionContext, actions: List<String>) {
         actions.forEach { executeSingle(context, it) }
     }

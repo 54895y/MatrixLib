@@ -1,11 +1,13 @@
 import io.izzel.taboolib.gradle.*
 import org.gradle.api.publish.maven.MavenPublication
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     java
     `maven-publish`
     id("io.izzel.taboolib") version "2.0.36"
+    id("org.jetbrains.dokka") version "1.9.20"
     kotlin("jvm") version "2.3.0"
 }
 
@@ -48,6 +50,18 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
+tasks.withType<DokkaTask>().configureEach {
+    moduleName.set("MatrixLib API")
+    dokkaSourceSets.configureEach {
+        includes.from("docs/api/overview.md")
+        jdkVersion.set(8)
+        skipDeprecated.set(false)
+        reportUndocumented.set(false)
+        noStdlibLink.set(false)
+        noJdkLink.set(false)
+    }
+}
+
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.fromTarget("1.8")
@@ -58,6 +72,16 @@ configure<JavaPluginExtension> {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
+}
+
+val dokkaJavadocJar by tasks.registering(Jar::class) {
+    dependsOn(tasks.named("dokkaJavadoc"))
+    archiveClassifier.set("javadoc")
+    from(tasks.named("dokkaJavadoc"))
+}
+
+tasks.named("assemble") {
+    dependsOn(dokkaJavadocJar)
 }
 
 val sharedApiRepoDirCandidates = listOf(
@@ -74,6 +98,7 @@ publishing {
         create<MavenPublication>("matrixlibApi") {
             from(components["java"])
             artifactId = "matrixlib-api"
+            artifact(dokkaJavadocJar)
         }
     }
     repositories {
@@ -88,4 +113,10 @@ tasks.register("publishMatrixApi") {
     group = "publishing"
     description = "Publish MatrixLib API artifact to the shared local repository."
     dependsOn("publishAllPublicationsToMatrixPublicRepository")
+}
+
+tasks.register("generateJavadoc") {
+    group = "documentation"
+    description = "Generate Javadoc-style API docs with Dokka."
+    dependsOn("dokkaJavadoc")
 }

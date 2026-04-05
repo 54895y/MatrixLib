@@ -8,6 +8,9 @@ import org.bukkit.plugin.Plugin
 import java.util.function.IntSupplier
 import java.util.function.Supplier
 
+/**
+ * Strongly typed chart descriptor used by [MatrixBStats].
+ */
 sealed class MatrixMetricsChart(val chartId: String) {
 
     class SimplePieChart internal constructor(
@@ -26,12 +29,24 @@ sealed class MatrixMetricsChart(val chartId: String) {
     ) : MatrixMetricsChart(chartId)
 }
 
+/**
+ * Shared `bStats` registration facade used by Matrix plugins.
+ *
+ * MatrixLib owns the shaded `bStats` runtime so downstream plugins only need to
+ * describe charts and plugin metadata.
+ */
 object MatrixBStats {
 
+    /**
+     * Register one or more charts for a plugin.
+     */
     fun initialize(plugin: Plugin, pluginId: Int, vararg charts: MatrixMetricsChart) {
         return initialize(plugin, pluginId, charts.asList())
     }
 
+    /**
+     * Register one or more charts for a plugin.
+     */
     fun initialize(plugin: Plugin, pluginId: Int, charts: Iterable<MatrixMetricsChart>) {
         Metrics(plugin, pluginId).apply {
             charts.forEach { chart ->
@@ -74,14 +89,23 @@ object MatrixBStats {
         }
     }
 
+    /**
+     * Create a `SimplePie` chart descriptor.
+     */
     fun simplePie(chartId: String, supplier: Supplier<String>): MatrixMetricsChart {
         return MatrixMetricsChart.SimplePieChart(chartId, supplier)
     }
 
+    /**
+     * Create a `SingleLineChart` descriptor.
+     */
     fun singleLine(chartId: String, supplier: IntSupplier): MatrixMetricsChart {
         return MatrixMetricsChart.SingleLineChartMetric(chartId, supplier)
     }
 
+    /**
+     * Create an `AdvancedPie` chart descriptor.
+     */
     fun advancedPie(chartId: String, supplier: Supplier<Map<String, Int>>): MatrixMetricsChart {
         return MatrixMetricsChart.AdvancedPieChart(chartId, supplier)
     }
