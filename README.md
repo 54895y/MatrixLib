@@ -7,12 +7,12 @@
 
 | 文档 | Release Notes | Releases | Issues |
 | --- | --- | --- | --- |
-| [Docs](https://54895y.github.io/docs/matrixlib) | [1.4.0](https://54895y.github.io/docs/matrixlib/release-notes-1-4-0) | [GitHub Releases](https://github.com/54895y/MatrixLib/releases) | [GitHub Issues](https://github.com/54895y/MatrixLib/issues) |
+| [Docs](https://54895y.github.io/docs/matrixlib) | [1.5.0](https://54895y.github.io/docs/matrixlib/release-notes-1-5-0) | [GitHub Releases](https://github.com/54895y/MatrixLib/releases) | [GitHub Issues](https://github.com/54895y/MatrixLib/issues) |
 
 ## 当前发布
 
-- 当前版本：`1.4.0`
-- 依赖坐标：`com.y54895.matrixlib:matrixlib-api:1.4.0`
+- 当前版本：`1.5.0`
+- 依赖坐标：`com.y54895.matrixlib:matrixlib-api:1.5.0`
 - 服务对象：`MatrixShop / MatrixAuth / MatrixCook / MatrixStorage`
 - 支持核心：`Paper / Bukkit / Spigot / Folia`
 
@@ -33,7 +33,7 @@
 
 ```kotlin
 dependencies {
-    compileOnly("com.y54895.matrixlib:matrixlib-api:1.4.0")
+    compileOnly("com.y54895.matrixlib:matrixlib-api:1.5.0")
 }
 ```
 
@@ -66,6 +66,22 @@ plugins/MatrixLib/Update/config.yml
 默认启用审批模式：
 
 - `require-approval: true`
+
+## 稳定 API 命名空间
+
+当前 `MatrixLib` 的稳定公开层集中在：
+
+- `com.y54895.matrixlib.api.action`
+- `com.y54895.matrixlib.api.brand`
+- `com.y54895.matrixlib.api.compat`
+- `com.y54895.matrixlib.api.console`
+- `com.y54895.matrixlib.api.economy`
+- `com.y54895.matrixlib.api.hologram`
+- `com.y54895.matrixlib.api.menu`
+- `com.y54895.matrixlib.api.metrics`
+- `com.y54895.matrixlib.api.resource`
+- `com.y54895.matrixlib.api.text`
+- `com.y54895.matrixlib.api.update`
 
 ## bStats 遥测
 

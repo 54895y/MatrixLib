@@ -4,6 +4,23 @@ All notable changes to MatrixLib will be documented in this file.
 
 The format is based on Keep a Changelog, and this project follows Semantic Versioning for release tags.
 
+## [1.5.0] - 2026-04-05
+
+### Added
+
+- Added stable API documentation and KDoc coverage for the MatrixLib public namespace.
+- Added Dokka Javadoc generation and `javadocJar` output.
+
+### Changed
+
+- Raised MatrixLib to the new stable API baseline for the Matrix plugin series.
+- Documented the public namespace structure for action, text, YAML, menu, hologram, metrics, and updater APIs.
+
+### Validated
+
+- Verified `bash ./gradlew build`.
+- Verified `bash ./gradlew generateJavadoc`.
+
 ## [1.4.0] - 2026-04-05
 
 ### Added
