@@ -7,12 +7,12 @@
 
 | 文档 | Release Notes | Releases | Issues |
 | --- | --- | --- | --- |
-| [Docs](https://54895y.github.io/docs/matrixlib) | [1.3.0](https://54895y.github.io/docs/matrixlib/release-notes-1-3-0) | [GitHub Releases](https://github.com/54895y/MatrixLib/releases) | [GitHub Issues](https://github.com/54895y/MatrixLib/issues) |
+| [Docs](https://54895y.github.io/docs/matrixlib) | [1.4.0](https://54895y.github.io/docs/matrixlib/release-notes-1-4-0) | [GitHub Releases](https://github.com/54895y/MatrixLib/releases) | [GitHub Issues](https://github.com/54895y/MatrixLib/issues) |
 
 ## 当前发布
 
-- 当前版本：`1.3.0`
-- 依赖坐标：`com.y54895.matrixlib:matrixlib-api:1.3.0`
+- 当前版本：`1.4.0`
+- 依赖坐标：`com.y54895.matrixlib:matrixlib-api:1.4.0`
 - 服务对象：`MatrixShop / MatrixAuth / MatrixCook / MatrixStorage`
 - 支持核心：`Paper / Bukkit / Spigot / Folia`
 
@@ -25,6 +25,7 @@
 - 共享 Bukkit / Folia 兼容桥接
 - 共享 `bStats` 封装 API `MatrixBStats`
 - 为下游插件统一承接 `bStats` shaded 依赖与图表注册
+- 共享 GitHub Releases 更新检查、审批下载与 `plugins/update/` 投递
 
 ## 下游集成
 
@@ -32,11 +33,39 @@
 
 ```kotlin
 dependencies {
-    compileOnly("com.y54895.matrixlib:matrixlib-api:1.3.0")
+    compileOnly("com.y54895.matrixlib:matrixlib-api:1.4.0")
 }
 ```
 
 如果工作区里存在本地 `MatrixLib` 目录，下游项目会通过 `includeBuild` 直接链接源码；否则会通过 GitHub `sourceControl` 拉取。
+
+## 自动更新
+
+当前推荐方案：
+
+- 用 GitHub Releases latest API 检查新版本
+- 默认只提示，不直接覆盖当前运行中的 jar
+- 由管理员审批后下载到 `plugins/update/`
+- 服务器重启后由 Bukkit / Spigot 更新目录机制自动替换
+
+配置文件：
+
+```text
+plugins/MatrixLib/Update/config.yml
+```
+
+管理命令：
+
+```text
+/matrixlib update list
+/matrixlib update check [all|插件名]
+/matrixlib update notes <插件名>
+/matrixlib update approve <插件名|all>
+```
+
+默认启用审批模式：
+
+- `require-approval: true`
 
 ## bStats 遥测
 

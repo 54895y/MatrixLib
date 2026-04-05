@@ -26,6 +26,7 @@ taboolib {
         coroutines = "1.8.1"
     }
     relocate("org.bstats", "${project.group}.libs.bstats")
+    relocate("com.google.gson", "${project.group}.libs.gson")
 }
 
 repositories {
@@ -35,6 +36,7 @@ repositories {
 
 dependencies {
     taboo("org.bstats:bstats-bukkit:3.2.1")
+    taboo("com.google.code.gson:gson:2.11.0")
     compileOnly("org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly(kotlin("stdlib"))
     compileOnly(fileTree("libs") {

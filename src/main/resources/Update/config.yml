@@ -1,0 +1,22 @@
+# MatrixLib shared updater configuration
+
+enabled: true
+
+check-on-startup: true
+notify-console: true
+notify-ops-on-join: true
+
+# When false, the updater can automatically download releases to plugins/update
+# as soon as a newer release is detected.
+require-approval: true
+
+# Optional periodic re-check. Set to 0 to disable.
+check-interval-minutes: 360
+
+github:
+  api-base: https://api.github.com
+  user-agent: MatrixLib-Updater
+  # Optional personal access token. Public release checks work without it,
+  # but authenticated requests have a much higher GitHub API rate limit.
+  token: ""
+  timeout-seconds: 15

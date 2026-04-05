@@ -4,10 +4,13 @@ import com.y54895.matrixlib.api.brand.MatrixBranding
 import com.y54895.matrixlib.api.console.MatrixConsoleFact
 import com.y54895.matrixlib.api.console.MatrixConsoleVisuals
 import com.y54895.matrixlib.api.economy.MatrixEconomy
+import com.y54895.matrixlib.api.update.MatrixPluginUpdates
+import com.y54895.matrixlib.command.MatrixLibCommands
 import com.y54895.matrixlib.metrics.BStatsMetrics
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.function.pluginVersion
 import taboolib.common.platform.function.warning
+import taboolib.platform.BukkitPlugin
 
 object MatrixLib : Plugin() {
 
@@ -30,6 +33,16 @@ object MatrixLib : Plugin() {
 
     override fun onEnable() {
         MatrixEconomy.reload()
+        MatrixPluginUpdates.bootstrap(branding)
+        MatrixLibCommands.register()
+        MatrixPluginUpdates.register(
+            plugin = BukkitPlugin.getInstance(),
+            displayName = "MatrixLib",
+            repoOwner = "54895y",
+            repoName = "MatrixLib",
+            assetNamePattern = "MatrixLib-.*\\.jar",
+            commandHint = "/matrixlib"
+        )
         runCatching { BStatsMetrics.initialize() }
             .onFailure {
                 warning("Failed to initialize bStats metrics: ${it.message ?: it.javaClass.simpleName}")
@@ -40,6 +53,7 @@ object MatrixLib : Plugin() {
             details = listOf(
                 MatrixConsoleFact("共享接口", "action / menu / compat / text / yaml / console / economy"),
                 MatrixConsoleFact("货币提供者", MatrixEconomy.providerSummary()),
+                MatrixConsoleFact("更新器", "GitHub Releases / 审批下载 / plugins/update"),
                 MatrixConsoleFact("运行状态", "控制台品牌 / 资源桥接 / 通用适配")
             )
         )
