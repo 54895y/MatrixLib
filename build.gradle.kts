@@ -24,7 +24,7 @@ taboolib {
         bukkitApi("1.12")
     }
     version {
-        taboolib = "6.2.4-99fb800"
+        taboolib = "6.3.0-0e96352"
         coroutines = "1.8.1"
     }
     relocate("org.bstats", "${project.group}.libs.bstats")
@@ -51,6 +51,7 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.processResources {
+    inputs.property("version", project.version)
     filesMatching(listOf("plugin.yml", "paper-plugin.yml")) {
         expand("version" to project.version)
     }
