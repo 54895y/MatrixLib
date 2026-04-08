@@ -60,6 +60,7 @@ object MatrixLib : Plugin() {
     }
 
     override fun onDisable() {
+        MatrixPluginUpdates.shutdown()
         MatrixConsoleVisuals.renderShutdown(
             branding = branding,
             details = listOf(

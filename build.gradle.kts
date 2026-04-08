@@ -50,6 +50,12 @@ tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
 }
 
+tasks.processResources {
+    filesMatching(listOf("plugin.yml", "paper-plugin.yml")) {
+        expand("version" to project.version)
+    }
+}
+
 tasks.withType<DokkaTask>().configureEach {
     moduleName.set("MatrixLib API")
     dokkaSourceSets.configureEach {

@@ -117,7 +117,7 @@ object MatrixPluginUpdates {
     private var bootstrapped = false
 
     @Volatile
-    private var repeatingTaskId = -1
+    private var repeatingTask: FoliaUtil.TaskHandle? = null
 
     lateinit var settings: MatrixUpdateSettings
         private set
@@ -261,6 +261,15 @@ object MatrixPluginUpdates {
     fun notesPreview(displayName: String): List<String> {
         val candidate = candidate(displayName) ?: return emptyList()
         return releaseNotesPreview(candidate.release.body)
+    }
+
+    fun shutdown() {
+        repeatingTask?.cancel()
+        repeatingTask = null
+        registrations.clear()
+        candidates.clear()
+        notifiedOps.clear()
+        bootstrapped = false
     }
 
     private fun checkAsync(managed: MatrixManagedPlugin, sender: CommandSender? = null) {
@@ -442,21 +451,18 @@ object MatrixPluginUpdates {
         if (settings.checkIntervalMinutes <= 0L) {
             return
         }
-        val periodTicks = settings.checkIntervalMinutes * 60L * 20L
-        repeatingTaskId = FoliaUtil.runRepeating(
+        val periodMinutes = settings.checkIntervalMinutes
+        repeatingTask?.cancel()
+        repeatingTask = FoliaUtil.runRepeating(
             BukkitPlugin.getInstance(),
-            periodTicks,
-            periodTicks,
+            periodMinutes * 60L * 20L,
+            periodMinutes * 60L * 20L,
             Runnable { checkAllAsync() }
-        ).hashCode()
+        )
     }
 
     private fun runAsync(block: () -> Unit) {
-        if (FoliaUtil.isFolia) {
-            FoliaUtil.runLater(BukkitPlugin.getInstance(), 1L, Runnable(block))
-        } else {
-            Bukkit.getScheduler().runTaskAsynchronously(BukkitPlugin.getInstance(), Runnable(block))
-        }
+        FoliaUtil.runAsync(BukkitPlugin.getInstance(), Runnable(block))
     }
 
     private fun loadSettings(): MatrixUpdateSettings {

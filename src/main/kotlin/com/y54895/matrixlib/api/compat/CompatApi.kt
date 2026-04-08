@@ -15,6 +15,7 @@ import org.bukkit.material.Hopper as LegacyHopper
 import org.bukkit.plugin.Plugin
 import java.lang.reflect.Method
 import java.util.Locale
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.function.Consumer
 
@@ -52,6 +53,10 @@ object ServerCompat {
         val implementationClass = server.javaClass.name
         val serverName = runCatching { server.name }.getOrElse { Bukkit.getName() }
         val versionText = Bukkit.getVersion()
+        val hasFoliaSchedulers =
+            serverHasMethod(server, "getGlobalRegionScheduler") &&
+                serverHasMethod(server, "getRegionScheduler") &&
+                serverHasMethod(server, "getAsyncScheduler")
         val composite = listOf(serverName, versionText, implementationClass)
             .joinToString(" ")
             .lowercase(Locale.ROOT)
@@ -61,7 +66,9 @@ object ServerCompat {
         }
 
         when {
-            classExists("io.papermc.paper.threadedregions.RegionizedServer") || composite.contains("folia") -> {
+            classExists("io.papermc.paper.threadedregions.RegionizedServer") ||
+                composite.contains("folia") ||
+                hasFoliaSchedulers -> {
                 ServerRuntime(ServerFamily.FOLIA, "Folia", serverName, versionText, implementationClass)
             }
             classExists("io.papermc.paper.configuration.Configuration") || composite.contains("paper") ||
@@ -118,6 +125,12 @@ object ServerCompat {
             Class.forName(className, false, Bukkit.getServer().javaClass.classLoader)
         }.isSuccess || runCatching {
             Class.forName(className)
+        }.isSuccess
+    }
+
+    private fun serverHasMethod(server: Any, name: String): Boolean {
+        return runCatching {
+            server.javaClass.getMethod(name)
         }.isSuccess
     }
 }
@@ -441,11 +454,11 @@ object BukkitCompat {
 object SchedulerBridge {
 
     fun runLater(plugin: Plugin, delayTicks: Long, task: Runnable) {
-        Bukkit.getScheduler().runTaskLater(plugin, task, delayTicks)
+        FoliaUtil.runLater(plugin, delayTicks, task)
     }
 
     fun runAsync(plugin: Plugin, task: Runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, task)
+        FoliaUtil.runAsync(plugin, task)
     }
 
     fun runPlayerTaskLater(plugin: Plugin, player: Player, delayTicks: Long, task: Runnable) {
@@ -509,6 +522,22 @@ object FoliaUtil {
     private val globalRunFixedRateMethod by lazy {
         globalRegionScheduler?.javaClass?.methods?.firstOrNull {
             it.name == "runAtFixedRate" && it.parameterCount == 4
+        }
+    }
+
+    private val asyncScheduler by lazy {
+        if (!isFolia) {
+            null
+        } else {
+            runCatching {
+                Bukkit.getServer().javaClass.getMethod("getAsyncScheduler").invoke(Bukkit.getServer())
+            }.getOrNull()
+        }
+    }
+
+    private val asyncRunNowMethod by lazy {
+        asyncScheduler?.javaClass?.methods?.firstOrNull {
+            it.name == "runNow" && it.parameterCount == 2
         }
     }
 
@@ -589,6 +618,32 @@ object FoliaUtil {
         return TaskHandle { task.cancel() }
     }
 
+    fun runAsync(plugin: Plugin, action: Runnable): TaskHandle {
+        if (!isFolia) {
+            val task = Bukkit.getScheduler().runTaskAsynchronously(plugin, action)
+            return TaskHandle { task.cancel() }
+        }
+
+        var scheduledTask: Any? = null
+        val consumer = Consumer<Any?> { task ->
+            if (scheduledTask == null && task != null) {
+                scheduledTask = task
+            }
+            action.run()
+        }
+
+        val returnedTask = invokeAsync(asyncRunNowMethod, plugin, consumer)
+        if (returnedTask != null) {
+            scheduledTask = returnedTask
+        }
+        if (scheduledTask != null) {
+            return TaskHandle { cancelScheduledTask(scheduledTask) }
+        }
+
+        val future = CompletableFuture.runAsync(action)
+        return TaskHandle { future.cancel(true) }
+    }
+
     fun runAtLocation(plugin: Plugin, location: Location, action: Runnable) {
         if (!isFolia) {
             action.run()
@@ -647,6 +702,14 @@ object FoliaUtil {
 
     private fun invokeGlobal(method: Method?, vararg args: Any?): Any? {
         val scheduler = globalRegionScheduler ?: return null
+        val targetMethod = method ?: return null
+        return runCatching {
+            targetMethod.invoke(scheduler, *args)
+        }.getOrNull()
+    }
+
+    private fun invokeAsync(method: Method?, vararg args: Any?): Any? {
+        val scheduler = asyncScheduler ?: return null
         val targetMethod = method ?: return null
         return runCatching {
             targetMethod.invoke(scheduler, *args)
